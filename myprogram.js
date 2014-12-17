@@ -1,3 +1,3 @@
-// BABY STEPS 1 of 13
-console.log('HELLO WORLD');
-// ----------------------------------
+// Learn You Node
+
+// See each of the branches for the code for each step.
