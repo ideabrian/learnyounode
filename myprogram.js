@@ -1,50 +1,14 @@
-// var http = require('http');
-// var urls = [process.argv[2], process.argv[3], process.argv[4]];
-// var pages =[];
-// var waiting = 0;
+var net = require('net');
 
-// urls.map(function(url, idx){
-// 	http.get(url, function(res){
-// 		waiting++;
-// 		var alldata = "";
-// 		res.setEncoding('utf8');
-// 		res.on('data', function(data){alldata += data});
-// 		res.on('end', function(){
-// 			pages[idx] = alldata;
-// 			waiting--;
-// 			if (!waiting){
-// 				pages.map(function(page){console.log(page)});
-// 			}
-// 		});
-// 	});
-// });
+function pad(n) { return n < 10 ? '0' + n : n }
 
-var http = require('http');
-var bl = require('bl');
-var results = [];
-var count = 0;
-
-function printResults () {
-	for (var i = 0; i < 3; i++){
-		console.log(results[i]);
-		}
-}
-
-function httpGet (index) {
-	http.get(process.argv[2 + index], function (response) {
-		response.pipe(bl(function (err, data) {
-			if (err)
-				return console.error(err);
-
-			results[index] = data.toString();
-			count++;
-
-			if (count == 3) // at the last one
-				printResults();
-		}));
-	});
-}
-
-for (var i = 0; i < 3; i++) {
-	httpGet(i)
-}
+var server = net.createServer(function(socket) {
+	d = new Date();
+	s = d.getFullYear() + '-'
+	  + pad(d.getMonth() + 1) + '-'
+	  + pad(d.getDate()) + " "
+	  + pad(d.getHours()) + ':'
+	  + pad(d.getMinutes()) + '\n';
+	socket.end(s);
+});
+server.listen(process.argv[2]);
