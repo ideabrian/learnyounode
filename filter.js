@@ -9,14 +9,24 @@ var path = require('path');
 
 // this API takes a path, an extension, and a callback argument
 // 
+// module.exports = function (input, ext, callback) {
+// 	fs.readdir(input, function (err, files){
+// 		if(err)
+// 		  return callback(err) // early return
+// 		filtered = files.filter(function (e) {
+// 		  return path.extname(e) === '.'+ ext;
+// 		});
+// 		callback(null, filtered);
+// 	});
+// }
+
 module.exports = function (input, ext, callback) {
-	fs.readdir(input, function (err, files){
+	fs.readdir(input, function(err, files){
 		if(err)
-		  return callback(err) // early return
-		// console.log(files);
-		filtered = files.filter(function (e) {
-		  return path.extname(e) === '.'+ ext;
+			return callback(err); // early callback if err
+		list = files.filter(function(file){
+			return path.extname(file) === '.' + ext;
 		});
-		callback(null, filtered);
+		callback(null, list);
 	});
 }
