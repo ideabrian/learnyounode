@@ -1,15 +1,50 @@
-// Learn You Node
+// var http = require('http');
+// var urls = [process.argv[2], process.argv[3], process.argv[4]];
+// var pages =[];
+// var waiting = 0;
+
+// urls.map(function(url, idx){
+// 	http.get(url, function(res){
+// 		waiting++;
+// 		var alldata = "";
+// 		res.setEncoding('utf8');
+// 		res.on('data', function(data){alldata += data});
+// 		res.on('end', function(){
+// 			pages[idx] = alldata;
+// 			waiting--;
+// 			if (!waiting){
+// 				pages.map(function(page){console.log(page)});
+// 			}
+// 		});
+// 	});
+// });
 
 var http = require('http');
 var bl = require('bl');
-var streams = [];
-var urls = [process.argv[2], process.argv[3], process.argv[4] ];
+var results = [];
+var count = 0;
 
-input = process.argv[2];
+function printResults () {
+	for (var i = 0; i < 3; i++){
+		console.log(results[i]);
+		}
+}
 
-http.get(input, function(response){
-	response.setEncoding('utf8');
-	console.log("Got response: " + response.statusCode);
-}).on('error', function(e) {
-		console.log("Get error" + e.message);
+function httpGet (index) {
+	http.get(process.argv[2 + index], function (response) {
+		response.pipe(bl(function (err, data) {
+			if (err)
+				return console.error(err);
+
+			results[index] = data.toString();
+			count++;
+
+			if (count == 3) // at the last one
+				printResults();
+		}));
 	});
+}
+
+for (var i = 0; i < 3; i++) {
+	httpGet(i)
+}
